@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Bestie! 💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Hind Siliguri', 'Fredoka', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #fed6e3 50%, #fbc2eb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Custom Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .animate-pulse-slow {
+            animation: pulse-slow 3s ease-in-out infinite;
+        }
+
+        /* Card Flip Effect */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Floating Background Particles */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatUp 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+            20% { opacity: 0.8; }
+            100% {
+                transform: translateY(-10vh) scale(1.2) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Click Heart Particle */
+        .click-heart {
+            position: absolute;
+            pointer-events: none;
+            animation: heartBurst 1s ease-out forwards;
+            color: #ff4b72;
+            font-size: 1.5rem;
+            z-index: 9999;
+        }
+
+        @keyframes heartBurst {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(-50%, -80px) scale(1.5); opacity: 0; }
+        }
+
+        /* Candle Flame Animation */
+        .flame {
+            animation: flicker 0.6s ease-in-out infinite alternate;
+            transform-origin: center bottom;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+            50% { transform: scale(1.1) rotate(2deg); opacity: 1; }
+            100% { transform: scale(0.95) rotate(-1deg); opacity: 0.85; }
+        }
+    </style>
+</head>
+<body class="relative flex flex-col justify-between min-h-screen text-gray-800 selection:bg-pink-300 selection:text-pink-900">
+
+    <!-- Floating Background Elements -->
+    <div id="particles-container"></div>
+
+    <!-- Top Music Toggle Button -->
+    <div class="fixed top-4 right-4 z-50">
+        <button id="musicToggle" class="bg-white/80 backdrop-blur-md hover:bg-white text-pink-500 p-3 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 px-4 border border-pink-200 hover:scale-105">
+            <i class="fa-solid fa-music text-lg animate-spin-slow" id="musicIcon"></i>
+            <span class="text-sm font-semibold hidden sm:inline" id="musicText">গান শুনুন 🎵</span>
+        </button>
+    </div>
+
+    <!-- Main Container Pages -->
+    <main class="relative z-10 flex-grow flex items-center justify-center p-4 md:p-6">
+
+        <!-- ================= PAGE 0: WELCOME PAGE ================= -->
+        <section id="page1" class="page-section w-full max-w-2xl text-center space-y-6 transition-all duration-500 transform">
+            <div class="bg-white/70 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl border border-pink-100 relative overflow-hidden flex flex-col items-center justify-center">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-300/30 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-300/30 rounded-full blur-2xl"></div>
+
+                <div class="text-6xl mb-4 animate-bounce">🎁✨</div>
+
+                <span class="inline-block px-4 py-1.5 bg-pink-100 text-pink-600 rounded-full text-sm font-medium mb-3 shadow-sm">
+                    A Very Special Birthday Surprise
+                </span>
+
+                <h1 class="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600 leading-tight mb-4">
+                    Welcome Bubu! 💖
+                </h1>
+
+                <p class="text-gray-600 text-base md:text-lg mb-8 max-w-md">
+                    আজকের এই বিশেষ দিনে তোমার জন্য ছোট্ট একটি সারপ্রাইজ উপহার... ক্লিক করে ঢুকে পড়ো ভালোবাসার দুনিয়ায়! 🎉
+                </p>
+
+                <button onclick="nextPage()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-4 px-10 rounded-full shadow-xl hover:shadow-pink-300/50 transition-all duration-300 transform hover:scale-105 text-lg flex items-center gap-3">
+                    <span>সারপ্রাইজ খুলুন 💌</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 1: PRAYER, BEAUTIFUL MIND & FRIENDSHIP ================= -->
+        <section id="page2" class="page-section hidden w-full max-w-3xl text-center space-y-6 transition-all duration-500 transform">
+            <div class="bg-white/70 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-2xl border border-pink-100 relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-pink-300/30 rounded-full blur-2xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-300/30 rounded-full blur-2xl"></div>
+
+                <!-- Sparkle Badge -->
+                <span class="inline-block px-4 py-1.5 bg-pink-100 text-pink-600 rounded-full text-sm font-medium mb-2 shadow-sm">
+                    ✨ Happy Birthday My Favorite Person 🎉
+                </span>
+
+                <h2 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600 leading-tight mb-6">
+                    শুভ জন্মদিন, আমার পার্সোনাল Pookie! 💖
+                </h2>
+
+                <!-- Interactive Flip Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left my-6">
+                    
+                    <!-- Card 1: Your Prayer -->
+                    <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                        <div class="card-inner relative w-full h-full transform-style-3d shadow-lg rounded-2xl">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-purple-400 to-indigo-400 p-5 rounded-2xl text-white flex flex-col justify-between items-center text-center">
+                                <div class="text-4xl mt-4">🤲</div>
+                                <div>
+                                    <h3 class="text-xl font-bold">তোমার জন্য প্রার্থনা</h3>
+                                    <p class="text-xs opacity-90 mt-1">কার্ডটি উল্টে দেখতে ক্লিক করো 👆</p>
+                                </div>
+                                <span class="text-xs bg-white/20 px-3 py-1 rounded-full">Click Me</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-white p-4 rounded-2xl border-2 border-purple-300 flex flex-col justify-center text-gray-700 text-xs md:text-sm leading-relaxed overflow-y-auto">
+                                <h4 class="font-bold text-purple-600 mb-1">তোমার জন্য প্রার্থনা 🌙</h4>
+                                <p>“মহান আল্লাহ তোমার জীবনকে অনাবিল সুখ, শান্তি ও সফলতায় ভরে দিন। তোমার সব নেক আশা ও স্বপ্নগুলো যেন খুব দ্রুত পূরণ হয়। জীবনের প্রতিটি পদক্ষেপে তুমি যেন সঠিক পথ ও সৃষ্টিকর্তার রহমত পাও। সারাজীবন সুস্থ থেকো, ভালো থেকো—শুভ জন্মদিন!”</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Your Beautiful Mind -->
+                    <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                        <div class="card-inner relative w-full h-full transform-style-3d shadow-lg rounded-2xl">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-pink-400 to-rose-400 p-5 rounded-2xl text-white flex flex-col justify-between items-center text-center">
+                                <div class="text-4xl mt-4">🌸</div>
+                                <div>
+                                    <h3 class="text-xl font-bold">তোমার সুন্দর মন</h3>
+                                    <p class="text-xs opacity-90 mt-1">কার্ডটি উল্টে দেখতে ক্লিক করো 👆</p>
+                                </div>
+                                <span class="text-xs bg-white/20 px-3 py-1 rounded-full">Click Me</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-white p-4 rounded-2xl border-2 border-pink-300 flex flex-col justify-center text-gray-700 text-xs md:text-sm leading-relaxed overflow-y-auto">
+                                <h4 class="font-bold text-pink-600 mb-1">তোমার সুন্দর মন 💕</h4>
+                                <p>শুভ জন্মদিন আমার পার্সোনাল pookie এবং সবচেয়ে প্রিয় মানুষটা। তুমি আমার জীবনে বন্ধু হিসেবে যেমন সেরা, বয়ফ্রেন্ড হিসেবেও আর জীবন সঙ্গী হিসেবেও একদম এক্কেরে এক পিস!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: Our Friendship -->
+                    <div class="h-64 perspective-1000 cursor-pointer" onclick="flipCard(this)">
+                        <div class="card-inner relative w-full h-full transform-style-3d shadow-lg rounded-2xl">
+                            <!-- Front -->
+                            <div class="absolute w-full h-full backface-hidden bg-gradient-to-br from-rose-400 to-pink-500 p-5 rounded-2xl text-white flex flex-col justify-between items-center text-center">
+                                <div class="text-4xl mt-4">✨</div>
+                                <div>
+                                    <h3 class="text-xl font-bold">আমাদের বন্ধুত্ব</h3>
+                                    <p class="text-xs opacity-90 mt-1">কার্ডটি উল্টে দেখতে ক্লিক করো 👆</p>
+                                </div>
+                                <span class="text-xs bg-white/20 px-3 py-1 rounded-full">Click Me</span>
+                            </div>
+                            <!-- Back -->
+                            <div class="absolute w-full h-full backface-hidden rotate-y-180 bg-white p-4 rounded-2xl border-2 border-rose-300 flex flex-col justify-center text-gray-700 text-xs md:text-sm leading-relaxed overflow-y-auto">
+                                <h4 class="font-bold text-rose-600 mb-1">আমাদের বন্ধুত্ব 💖</h4>
+                                <p>“হাজারো চড়াই-উতরাইয়ের মাঝে আমাদের এই পথচলা এক স্নিগ্ধ আলোর কাব্য, যেখানে বন্ধুত্বের নিবিড় ছায়ায় মিশে আছে ভালোলাগার অনন্ত গন্তব্য। সুখ-দুঃখের প্রতিটি বাঁকে হাতটি ধরে এগিয়ে যাওয়ার এই বন্ধন বেড়ে উঠুক পবিত্রের দিকে , আমাদের ভালোবাসার গল্পটা যেন হয় এক চিরকালের অমর উপাখ্যান ও পবিত্র বন্ধনের দিকে”</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center pt-4 border-t border-pink-100">
+                    <button onclick="prevPage()" class="px-5 py-2.5 rounded-full border border-pink-300 text-pink-600 hover:bg-pink-50 font-medium transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> পেছনে
+                    </button>
+                    <button onclick="nextPage()" class="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3.5 px-8 rounded-full shadow-lg hover:shadow-pink-300/50 transition-all duration-300 transform hover:-translate-y-1 text-base flex items-center gap-2">
+                        <span>ছবি ও বিশেষ চিঠি দেখো 🖼️</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 2: PHOTO & 26-LINE LETTER ================= -->
+        <section id="page3" class="page-section hidden w-full max-w-4xl text-center space-y-6 transition-all duration-500">
+            <div class="bg-white/70 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-2xl border border-pink-100">
+                <div class="mb-4">
+                    <span class="text-pink-500 font-semibold uppercase tracking-wider text-sm">26 Birthday Messages</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mt-1">আমাদের ২৬টি বিশেষ চিঠি 💌</h2>
+                </div>
+
+                <!-- Letter Box with Full 26 Points Letter -->
+                <div class="bg-pink-50/80 border-2 border-pink-200 p-6 rounded-2xl text-left max-h-[480px] overflow-y-auto shadow-inner relative space-y-3 font-medium text-gray-700">
+                    <h3 class="text-xl font-bold text-pink-600 border-b border-pink-200 pb-2">Dear bubu,</h3>
+                    
+                    <ol class="list-decimal list-inside space-y-2 text-sm md:text-base leading-relaxed">
+                        <li>Happy 26th Birthday to the one who makes my world infinitely brighter.</li>
+                        <li>As you turn twenty-six today, I find myself thinking—if your mother had not brought you into this world, how would my heart ever be filled with such endless gratitude for every single moment we share?</li>
+                        <li>Amidst all of life's unpredictable twists and turns, walking beside you has been nothing short of a profound blessing.</li>
+                        <li>You are not just my greatest companion and my favorite pookie, but also the calm in every storm.</li>
+                        <li>Our friendship forms the gentle shade under which my heart has learned to truly feel at home.</li>
+                        <li>Every shared laugh, every quiet conversation, and every dream we weave together is written like poetry in my heart.</li>
+                        <li>You bring a warmth into my days that no season can ever fade or diminish.</li>
+                        <li>Watching you grow, dream, and conquer life with your unique grace is a privilege I cherish deeply.</li>
+                        <li>Twenty-six years ago, a soul was born into this world that would eventually become my most favorite part of it.</li>
+                        <li>May this new chapter of your life unfold with endless grace, quiet peace, and profound joy.</li>
+                        <li>May every ambition you hold close to your chest find its way into reality this year.</li>
+                        <li>I pray that whenever doubt tries to whisper, certainty and courage surround you instead.</li>
+                        <li>Through every high and every low, my hand will remain right here, holding yours through it all.</li>
+                        <li>You possess a heart of gold and a spirit that inspires everyone fortunate enough to truly know you.</li>
+                        <li>Thank you for choosing me to walk this winding, beautiful path of life by your side.</li>
+                        <li>The bond we share is more than just a connection; it is a sacred, enduring story of mutual devotion.</li>
+                        <li>May the coming year reward your hard work with breathtaking success and sweet tranquility.</li>
+                        <li>Never forget how deeply valued, deeply respected, and fiercely loved you truly are.</li>
+                        <li>Let today be a celebration of not just the years you have lived, but the incredible person you have become.</li>
+                        <li>I hope this milestone year brings you closer to every single goal you have ever dared to imagine.</li>
+                        <li>May your days be filled with good health, untamed laughter, and moments that take your breath away.</li>
+                        <li>No matter where life takes us next, my favorite place in the entire universe will always be right beside you.</li>
+                        <li>Here is to twenty-six magnificent years of your existence and to all the chapters yet waiting to be written.</li>
+                        <li>May our story continue to grow softer, stronger, and more luminous with every passing day.</li>
+                        <li>You are my today, my tomorrow, and my favorite reason to smile through it all.</li>
+                        <li>Happy 26th birthday, my love—may this year be your greatest masterpiece yet.</li>
+                    </ol>
+
+                    <div class="pt-4 border-t border-pink-200 text-right font-bold text-pink-600 text-base">
+                        With all my love,<br>your pakhi ❤️
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center mt-6 pt-4 border-t border-pink-100">
+                    <button onclick="prevPage()" class="px-5 py-2.5 rounded-full border border-pink-300 text-pink-600 hover:bg-pink-50 font-medium transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> পেছনে
+                    </button>
+                    <button onclick="nextPage()" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium shadow-md hover:shadow-pink-300 transition flex items-center gap-2">
+                        কেক কাটিং ও উইশ গান 🎂 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 3: CAKE CUTTING & CELEBRATION SONG ================= -->
+        <section id="page4" class="page-section hidden w-full max-w-xl text-center space-y-6 transition-all duration-500">
+            <div class="bg-white/80 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-2xl border border-pink-100 relative">
+                
+                <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600">
+                    মেক এ উইশ, কেক কাটো & গান শোনো! 🎉
+                </h2>
+                <p class="text-gray-500 text-sm mt-1">মোমবাতিতে ক্লিক করে নিভিয়ে দাও এবং কনফেটি ব্লাস্ট উপভোগ করো!</p>
+
+                <!-- Interactive Birthday Cake Graphic -->
+                <div class="py-8 flex flex-col items-center justify-center">
+                    <div class="relative w-64 h-48 flex flex-col items-center justify-end">
+                        
+                        <!-- Candles Container -->
+                        <div class="flex gap-6 mb-1 z-10">
+                            <!-- Candle 1 -->
+                            <div onclick="extinguishCandle(this)" class="candle cursor-pointer group flex flex-col items-center">
+                                <div class="flame text-amber-400 text-xl group-hover:scale-125 transition-transform">🔥</div>
+                                <div class="w-3 h-10 bg-gradient-to-b from-yellow-200 to-yellow-400 rounded-t-sm shadow"></div>
+                            </div>
+                            <!-- Candle 2 -->
+                            <div onclick="extinguishCandle(this)" class="candle cursor-pointer group flex flex-col items-center">
+                                <div class="flame text-amber-400 text-xl group-hover:scale-125 transition-transform">🔥</div>
+                                <div class="w-3 h-12 bg-gradient-to-b from-pink-300 to-pink-500 rounded-t-sm shadow"></div>
+                            </div>
+                            <!-- Candle 3 -->
+                            <div onclick="extinguishCandle(this)" class="candle cursor-pointer group flex flex-col items-center">
+                                <div class="flame text-amber-400 text-xl group-hover:scale-125 transition-transform">🔥</div>
+                                <div class="w-3 h-10 bg-gradient-to-b from-purple-200 to-purple-400 rounded-t-sm shadow"></div>
+                            </div>
+                        </div>
+
+                        <!-- Top Cake Tier -->
+                        <div class="w-44 h-14 bg-gradient-to-r from-pink-300 via-pink-200 to-pink-300 rounded-t-2xl shadow-md border-b-4 border-pink-400 relative overflow-hidden flex items-center justify-around">
+                            <span class="text-xs">🍓</span>
+                            <span class="text-xs">🍒</span>
+                            <span class="text-xs">🍓</span>
+                        </div>
+
+                        <!-- Bottom Cake Tier -->
+                        <div class="w-56 h-20 bg-gradient-to-r from-rose-400 via-pink-400 to-rose-400 rounded-t-xl shadow-lg relative flex items-center justify-center border-t-2 border-white/40">
+                            <div class="text-white font-bold text-sm tracking-wider uppercase drop-shadow">Happy Birthday Bubu</div>
+                        </div>
+
+                        <!-- Cake Stand Plate -->
+                        <div class="w-64 h-4 bg-gray-200 rounded-full shadow-md border-t border-gray-300"></div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="launchConfetti()" class="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+                        <span>🎉 Celebrate Confetti!</span>
+                    </button>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-between items-center mt-8 pt-4 border-t border-pink-100">
+                    <button onclick="prevPage()" class="px-5 py-2.5 rounded-full border border-pink-300 text-pink-600 hover:bg-pink-50 font-medium transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> পেছনে
+                    </button>
+                    <button onclick="nextPage()" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white font-medium shadow-md hover:shadow-pink-300 transition flex items-center gap-2">
+                        শেষ অভিনন্দন বার্তা 👑 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= PAGE 4: FINAL CONGRATULATION MESSAGE ================= -->
+        <section id="page5" class="page-section hidden w-full max-w-xl text-center space-y-6 transition-all duration-500">
+            <div class="bg-white/80 backdrop-blur-md p-8 md:p-12 rounded-3xl shadow-2xl border border-pink-100 relative text-center">
+                
+                <div class="text-6xl mb-4 animate-bounce">👑✨</div>
+
+                <h2 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600 mb-4">
+                    অভিনন্দন ও অশেষ ভালোবাসা! 💖
+                </h2>
+
+                <div class="bg-pink-50/80 border border-pink-200 p-6 rounded-2xl text-gray-700 space-y-3 shadow-inner">
+                    <p class="text-base md:text-lg leading-relaxed font-medium">
+                        শুভ জন্মদিন আমার প্রিয় মানুষ! তোমার ২৬তম জন্মদিনের এই বিশেষ দিনটি এবং সামনের দিনগুলো যেন আনন্দ, সাফল্য ও ভালোবাসায় ভরে ওঠে।
+                    </p>
+                    <p class="text-sm md:text-base text-pink-600 font-bold">
+                        সারাজীবন এভাবে একে অপরের পাশে থাকার এবং মিষ্টি মুহূর্তগুলো ভাগ করে নেয়ার প্রত্যাশায়... ❤️
+                    </p>
+                    <div class="pt-2 text-right font-bold text-pink-500">
+                        — With endless love, Pakhi 💕
+                    </div>
+                </div>
+
+                <div class="pt-6 flex flex-col sm:flex-row justify-center gap-3">
+                    <button onclick="launchConfetti()" class="bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transition">
+                        আবার কনফেটি উরাও! 🎉
+                    </button>
+                    <button onclick="goToPage(1)" class="border border-pink-300 text-pink-600 font-bold py-3 px-6 rounded-full hover:bg-pink-50 transition flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i> প্রথম পেজে ফিরে যাও
+                    </button>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex justify-start items-center mt-6 pt-4 border-t border-pink-100">
+                    <button onclick="prevPage()" class="px-5 py-2.5 rounded-full border border-pink-300 text-pink-600 hover:bg-pink-50 font-medium transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> পেছনে
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-4 text-xs text-pink-600 font-medium">
+        Made with ❤️ for Bubu by Pakhi!
+    </footer>
+
+    <!-- Background Audio Component -->
+    <audio id="bgMusic" loop>
+        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=happy-birthday-155461.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // State Management
+        let currentPage = 1;
+        const totalPages = 5;
+
+        // Navigation Functions
+        function nextPage() {
+            if (currentPage < totalPages) {
+                goToPage(currentPage + 1);
+            }
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                goToPage(currentPage - 1);
+            }
+        }
+
+        // Open specific page
+        function goToPage(pageNumber) {
+            // Hide all pages
+            for (let i = 1; i <= totalPages; i++) {
+                const p = document.getElementById(`page${i}`);
+                if (p) p.classList.add('hidden');
+            }
+
+            // Show selected page
+            const targetPage = document.getElementById(`page${pageNumber}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                currentPage = pageNumber;
+            }
+
+            if (pageNumber === 4 || pageNumber === 5) {
+                launchConfetti();
+            }
+        }
+
+        // Card Flip Functionality
+        function flipCard(cardElement) {
+            const inner = cardElement.querySelector('.card-inner');
+            if (inner) {
+                inner.classList.toggle('rotate-y-180');
+            }
+        }
+
+        // Candle Extinguish Effect
+        let blownOutCount = 0;
+        function extinguishCandle(candleElement) {
+            const flame = candleElement.querySelector('.flame');
+            if (flame && flame.style.display !== 'none') {
+                flame.style.display = 'none';
+                blownOutCount++;
+                
+                createHeartAt(candleElement.getBoundingClientRect().left + 10, candleElement.getBoundingClientRect().top);
+
+                if (blownOutCount === 3) {
+                    setTimeout(() => {
+                        launchConfetti();
+                    }, 300);
+                }
+            }
+        }
+
+        // Confetti Burst Trigger
+        function launchConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // Floating Hearts Particle on Screen Click
+        document.addEventListener('click', function(e) {
+            createHeartAt(e.clientX, e.clientY);
+        });
+
+        function createHeartAt(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'click-heart';
+            heart.innerHTML = ['❤️', '💖', '✨', '🌸', '🎉'][Math.floor(Math.random() * 5)];
+            heart.style.left = `${x}px`;
+            heart.style.top = `${y}px`;
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 1000);
+        }
+
+        // Audio Player Controls
+        const musicBtn = document.getElementById('musicToggle');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isPlaying) {
+                bgMusic.pause();
+                document.getElementById('musicText').innerText = "গান শুনুন 🎵";
+                isPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    document.getElementById('musicText').innerText = "গান থামান ⏸️";
+                    isPlaying = true;
+                }).catch(() => {
+                    alert("গান প্লে করতে পেজে আবার ক্লিক করুন।");
+                });
+            }
+        });
+
+        // Generate background floating shapes dynamically
+        function initBackgroundParticles() {
+            const container = document.getElementById('particles-container');
+            const symbols = ['💖', '✨', '🎈', '🌸', '⭐', '🎂'];
+            
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.animationDuration = `${6 + Math.random() * 6}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particle.style.fontSize = `${1.2 + Math.random() * 1.2}rem`;
+                container.appendChild(particle);
+            }
+        }
+
+        // Initialize on Load
+        window.onload = function() {
+            initBackgroundParticles();
+        };
+
+        // Live Image Preview Function
+        function previewUserImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgElement = document.getElementById('coupleImagePage2');
+                    if (imgElement) {
+                        imgElement.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</body>
+</html>
